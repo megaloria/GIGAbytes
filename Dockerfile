@@ -9,7 +9,9 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    ca-certificates
+    ca-certificates \
+    nodejs \
+    npm
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -26,8 +28,11 @@ WORKDIR /var/www
 # Copy application files
 COPY . /var/www
 
-# Install dependencies
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
+
+# Install Node dependencies and build frontend assets
+RUN npm install && npm run build
 
 # Cache routes and views at build time (these don't depend on env vars)
 RUN php artisan route:cache || true
