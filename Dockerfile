@@ -9,9 +9,11 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    ca-certificates \
-    nodejs \
-    npm
+    ca-certificates
+
+# Install Node.js 20 LTS via NodeSource (required for Vite 7)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
